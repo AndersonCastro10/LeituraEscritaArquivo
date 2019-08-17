@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace LeituraEscritaArquivo
 {
@@ -6,7 +7,24 @@ namespace LeituraEscritaArquivo
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            string caminho = @"\c:\";
+
+            try
+            {
+                // Criar a pasta de origem a partir de um caminho 
+
+                Directory.CreateDirectory(caminho + @"\origem");
+
+                // Criar um arquivo dentro dessa pasta
+
+            }
+            catch (IOException e )
+            {
+                Console.WriteLine("Ocorreu um erro!");
+                Console.WriteLine(e.Message);
+            }
+
+            Console.ReadLine();
         }
     }
 }
