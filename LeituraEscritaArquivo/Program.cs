@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Text;
+using System.Globalization;
 
 namespace LeituraEscritaArquivo
 {
@@ -7,24 +9,59 @@ namespace LeituraEscritaArquivo
     {
         static void Main(string[] args)
         {
-            string caminho = @"\c:\";
+            string diretorio = @"c:";
+            string pastaOrigem = @"\origem";
+            string pastaDestino = @"\saida";
 
             try
             {
-                // Criar a pasta de origem a partir de um caminho 
+                if (Directory.Exists(diretorio + pastaOrigem))
+                {
+                    Directory.Delete(diretorio + pastaOrigem, true); // Deleta pasta e tudo que há nela, independente se tem algo na pasta
+                }
 
-                Directory.CreateDirectory(caminho + @"\origem");
+                Directory.CreateDirectory(diretorio + pastaOrigem); // Criar a pasta de origem a partir de um caminho 
+                Directory.CreateDirectory(diretorio + pastaOrigem + pastaDestino); // Criar pasta de saida a partir de um caminho
 
-                // Criar um arquivo dentro dessa pasta
+                // Criar um arquivo dentro dessa pasta de origem
+
+                StringBuilder conteudoArquivo = new StringBuilder(); // para inserir as linhas do arquivo
+                conteudoArquivo.AppendLine("TV LED,1290.99,1");
+                conteudoArquivo.AppendLine("Video Game Chair,350.50,3");
+                conteudoArquivo.AppendLine("Iphone X,900.00,2");
+                conteudoArquivo.AppendLine("Samsung Galaxy 9,850.00,2");
+
+                string nomeArquivo = @"\itens.csv"; // nome do arquivo
+
+                File.AppendAllText(diretorio + pastaOrigem + nomeArquivo, conteudoArquivo.ToString()); // Criando o arquivo de origem
+
+                // Ler o conteudo do arquivo criado, fazer a multiplicação linha por linha colocando os resultados em outro arquivo
+
+                double totalVendas = 0.0;
+
+                using (StreamReader streamReader = File.OpenText(diretorio + pastaOrigem + nomeArquivo)) // Abrindo o arquivo
+                {
+                    StringBuilder sb = new StringBuilder();
+
+                    while (!streamReader.EndOfStream) //Enquanto não chegar na ultima linha faça
+                    {
+                        string[] linha = streamReader.ReadLine().Split(",");
+
+                        totalVendas = double.Parse(linha[1],CultureInfo.InvariantCulture) * int.Parse(linha[2]);
+
+                        sb.AppendLine(linha[0] + ',' + totalVendas.ToString("f2", CultureInfo.InvariantCulture));
+                    }
+
+                    string nomeArquivoDestino = @"\summary.csv";
+                    File.AppendAllText(diretorio + pastaOrigem + pastaDestino + nomeArquivoDestino, sb.ToString());
+                }
 
             }
-            catch (IOException e )
+            catch (IOException e)
             {
                 Console.WriteLine("Ocorreu um erro!");
                 Console.WriteLine(e.Message);
             }
-
-            Console.ReadLine();
         }
     }
 }
