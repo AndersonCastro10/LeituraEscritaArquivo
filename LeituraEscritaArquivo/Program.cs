@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Globalization;
+using LeituraEscritaArquivo.Entidades;
 
 namespace LeituraEscritaArquivo
 {
@@ -9,19 +10,34 @@ namespace LeituraEscritaArquivo
     {
         static void Main(string[] args)
         {
+            // Definindo diretórios e pastas 
+
             string diretorio = @"c:";
             string pastaOrigem = @"\origem";
+            string arquivoOrigem = @"\itens.csv";
             string pastaDestino = @"\saida";
+            string arquivoDestino = @"\summary.csv";
 
             try
             {
-                if (Directory.Exists(diretorio + pastaOrigem))
+                if (Directory.Exists(diretorio + pastaOrigem)) // Verifica se o caminho de origem está vazio
                 {
                     Directory.Delete(diretorio + pastaOrigem, true); // Deleta pasta e tudo que há nela, independente se tem algo na pasta
                 }
 
                 Directory.CreateDirectory(diretorio + pastaOrigem); // Criar a pasta de origem a partir de um caminho 
                 Directory.CreateDirectory(diretorio + pastaOrigem + pastaDestino); // Criar pasta de saida a partir de um caminho
+
+                // Interração com o usuario 
+
+                Console.Write("Seu arquivo será gravado no : ");
+                Console.WriteLine(diretorio + pastaOrigem);
+                Console.Write("E o nome dele é : ");
+                Console.WriteLine(arquivoOrigem);
+
+                Console.WriteLine();
+                Console.Write("Quantos itens deseja cadastrar ? : ");
+                int n = int.Parse(Console.ReadLine());
 
                 // Criar um arquivo dentro dessa pasta de origem
 
