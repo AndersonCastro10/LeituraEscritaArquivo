@@ -39,38 +39,56 @@ namespace LeituraEscritaArquivo
                 Console.Write("Quantos itens deseja cadastrar ? : ");
                 int n = int.Parse(Console.ReadLine());
 
+                using (StreamWriter sw = File.AppendText(diretorio + pastaOrigem + arquivoOrigem))
+                {
+                    for (int i = 1; i <= n; i++)
+                    {
+                        Console.WriteLine($"Produto numero{i}");
+                        Console.Write("Nome do produto : ");
+                        string nome = Console.ReadLine();
+                        Console.Write("Preço unitário do produto : ");
+                        double preco = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                        Console.Write("Quantidade vendida : ");
+                        int quantidade = int.Parse(Console.ReadLine());
+
+                        Produto produto = new Produto(nome, preco, quantidade);
+
+                        sw.WriteLine(produto.Nome + "," + produto.Preco.ToString("f2", CultureInfo.InvariantCulture) + "," + produto.Quantidade);
+                    }
+                }
+
                 // Criar um arquivo dentro dessa pasta de origem
 
-                StringBuilder conteudoArquivo = new StringBuilder(); // para inserir as linhas do arquivo
-                conteudoArquivo.AppendLine("TV LED,1290.99,1");
-                conteudoArquivo.AppendLine("Video Game Chair,350.50,3");
-                conteudoArquivo.AppendLine("Iphone X,900.00,2");
-                conteudoArquivo.AppendLine("Samsung Galaxy 9,850.00,2");
+                //StringBuilder conteudoArquivo = new StringBuilder(); // para inserir as linhas do arquivo
+                //conteudoArquivo.AppendLine("TV LED,1290.99,1");
+                //conteudoArquivo.AppendLine("Video Game Chair,350.50,3");
+                //conteudoArquivo.AppendLine("Iphone X,900.00,2");
+                //conteudoArquivo.AppendLine("Samsung Galaxy 9,850.00,2");
 
-                string nomeArquivo = @"\itens.csv"; // nome do arquivo
+                //string nomeArquivo = @"\itens.csv"; // nome do arquivo
 
-                File.AppendAllText(diretorio + pastaOrigem + nomeArquivo, conteudoArquivo.ToString()); // Criando o arquivo de origem
+                //File.AppendAllText(diretorio + pastaOrigem + nomeArquivo, conteudoArquivo.ToString()); // Criando o arquivo de origem
 
-                // Ler o conteudo do arquivo criado, fazer a multiplicação linha por linha colocando os resultados em outro arquivo
+                //// Ler o conteudo do arquivo criado, fazer a multiplicação linha por linha colocando os resultados em outro arquivo
 
-                double totalVendas = 0.0;
+                //double totalVendas = 0.0;
 
-                using (StreamReader streamReader = File.OpenText(diretorio + pastaOrigem + nomeArquivo)) // Abrindo o arquivo
-                {
-                    StringBuilder sb = new StringBuilder();
+                //using (StreamReader streamReader = File.OpenText(diretorio + pastaOrigem + nomeArquivo)) // Abrindo o arquivo
+                //{
+                //    StringBuilder sb = new StringBuilder();
 
-                    while (!streamReader.EndOfStream) //Enquanto não chegar na ultima linha faça
-                    {
-                        string[] linha = streamReader.ReadLine().Split(",");
+                //    while (!streamReader.EndOfStream) //Enquanto não chegar na ultima linha faça
+                //    {
+                //        string[] linha = streamReader.ReadLine().Split(",");
 
-                        totalVendas = double.Parse(linha[1],CultureInfo.InvariantCulture) * int.Parse(linha[2]);
+                //        totalVendas = double.Parse(linha[1],CultureInfo.InvariantCulture) * int.Parse(linha[2]);
 
-                        sb.AppendLine(linha[0] + ',' + totalVendas.ToString("f2", CultureInfo.InvariantCulture));
-                    }
+                //        sb.AppendLine(linha[0] + ',' + totalVendas.ToString("f2", CultureInfo.InvariantCulture));
+                //    }
 
-                    string nomeArquivoDestino = @"\summary.csv";
-                    File.AppendAllText(diretorio + pastaOrigem + pastaDestino + nomeArquivoDestino, sb.ToString());
-                }
+                //    string nomeArquivoDestino = @"\summary.csv";
+                //    File.AppendAllText(diretorio + pastaOrigem + pastaDestino + nomeArquivoDestino, sb.ToString());
+                //}
 
             }
             catch (IOException e)
