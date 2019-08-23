@@ -16,6 +16,8 @@ namespace LeituraEscritaArquivo.Entidades
             Preco = preco;
             Quantidade = quantidade;
         }
+        
+        public Produto() { }
 
         public double Total()
         {

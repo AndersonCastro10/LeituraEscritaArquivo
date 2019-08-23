@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Globalization;
 using LeituraEscritaArquivo.Entidades;
+using System.Collections.Generic;
 
 namespace LeituraEscritaArquivo
 {
@@ -17,6 +18,7 @@ namespace LeituraEscritaArquivo
             string arquivoOrigem = @"\itens.csv";
             string pastaDestino = @"\saida";
             string arquivoDestino = @"\summary.csv";
+            List<Produto> listaProdutos = new List<Produto>();
 
             try
             {
@@ -28,7 +30,7 @@ namespace LeituraEscritaArquivo
                 Directory.CreateDirectory(diretorio + pastaOrigem); // Criar a pasta de origem a partir de um caminho 
                 Directory.CreateDirectory(diretorio + pastaOrigem + pastaDestino); // Criar pasta de saida a partir de um caminho
 
-                // Interração com o usuario 
+                // Interação com o usuario 
 
                 Console.Write("Seu arquivo será gravado no : ");
                 Console.WriteLine(diretorio + pastaOrigem);
@@ -39,6 +41,7 @@ namespace LeituraEscritaArquivo
                 Console.Write("Quantos itens deseja cadastrar ? : ");
                 int n = int.Parse(Console.ReadLine());
 
+                Console.WriteLine();
                 using (StreamWriter sw = File.AppendText(diretorio + pastaOrigem + arquivoOrigem))
                 {
                     for (int i = 1; i <= n; i++)
@@ -52,11 +55,23 @@ namespace LeituraEscritaArquivo
                         int quantidade = int.Parse(Console.ReadLine());
 
                         Produto produto = new Produto(nome, preco, quantidade);
+                        listaProdutos.Add(produto);
 
                         sw.WriteLine(produto.Nome + "," + produto.Preco.ToString("f2", CultureInfo.InvariantCulture) + "," + produto.Quantidade);
+                        Console.WriteLine();
                     }
                 }
 
+                using (StreamWriter sw = File.AppendText(diretorio + pastaOrigem + pastaDestino + arquivoDestino))
+                {
+                    foreach (Produto item in listaProdutos)
+                    {
+                        sw.WriteLine(item.Nome + "," + item.Total().ToString("F2", CultureInfo.InvariantCulture));
+                    }
+
+                    Console.WriteLine("Seu novo arquivo com os totais foi gravado em " + diretorio + pastaOrigem + pastaDestino + arquivoDestino);
+                }
+                
                 // Criar um arquivo dentro dessa pasta de origem
 
                 //StringBuilder conteudoArquivo = new StringBuilder(); // para inserir as linhas do arquivo
